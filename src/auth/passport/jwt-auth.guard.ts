@@ -16,8 +16,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   canActivate(context: ExecutionContext) {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
-
-
       context.getClass(),
     ]);
     if (isPublic) {
@@ -25,6 +23,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     }
     return super.canActivate(context);
   }
+
+
   handleRequest(err, user, info) {
     if (err || !user) {
       throw err || new UnauthorizedException("token không hợp lệ");

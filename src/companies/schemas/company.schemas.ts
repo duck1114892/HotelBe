@@ -5,9 +5,21 @@ export type CompanyDocument = HydratedDocument<Company>;
 export class Company {
     @Prop()
     name: string;
-
     @Prop()
     address: string;
+    @Prop()
+    description: string;
+    @Prop()
+    logo: string
+    @Prop()
+    createdAt: Date;
+    @Prop()
+    updatedAt: Date;
+    @Prop()
+    isDeleted: boolean;
+
+    @Prop()
+    deletedAt: Date;
 
     @Prop({ type: Object })
     createdBy: {
@@ -18,25 +30,12 @@ export class Company {
     updatedBy: {
         _id: mongoose.Schema.Types.ObjectId,
         email: string
-    }
+    };
     @Prop({ type: Object })
     deletedBy: {
         _id: mongoose.Schema.Types.ObjectId,
         email: string
-    }
-    @Prop()
-    description: string;
-
-    @Prop()
-    createdAt: Date;
-
-    @Prop()
-    updatedAt: Date;
-    @Prop()
-    isDeleted: boolean;
-
-    @Prop()
-    deletedAt: Date;
+    };
 }
 
 export const CompanySchema = SchemaFactory.createForClass(Company);

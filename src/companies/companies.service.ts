@@ -11,6 +11,8 @@ import aqp from 'api-query-params';
 @Injectable()
 export class CompaniesService {
   constructor(@InjectModel(Company.name) private CompanyModel: SoftDeleteModel<CompanyDocument>) { }
+
+  // Tạo một companies
   async create(createCompanyDto: CreateCompanyDto, user: IUser) {
     const { name, description, address } = createCompanyDto
     return await this.CompanyModel.create({
@@ -25,16 +27,16 @@ export class CompaniesService {
     )
   }
 
+  // Lấy Tất Cả Thông Tin Companies Và Phân Trang
   async findAll(currentPage, limit, queryString) {
     const { filter, projection, population } = aqp(queryString);
-    delete filter.page
-    delete filter.limit
+    delete filter.current
+    delete filter.pageSize
     let { sort } = aqp(queryString);
     let offset = (+currentPage - 1) * (+limit);
     let defaultLimit = +limit ? +limit : 10;
     const totalItems = (await this.CompanyModel.find(filter)).length;
     const totalPages = Math.ceil(totalItems / defaultLimit);
-
     const result = await this.CompanyModel.find(filter)
       .skip(offset)
       .limit(defaultLimit)
@@ -42,29 +44,31 @@ export class CompaniesService {
       .sort(sort)
       .populate(population)
       .exec()
-    console.log(result)
+
     return {
       meta: {
-        current: currentPage, //trang hiện tại
-        pageSize: limit, //số lượng bản ghi đã lấy
-        pages: totalPages, //tổng số trang với điều kiện query
-        total: totalItems // tổng số phần tử (số bản ghi)
+        current: currentPage,
+        pageSize: limit,
+        pages: totalPages,
+        total: totalItems
       },
-      result //kết quả query
+      result
     }
-
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} company`;
+  // Tìm Kiếm Companies 
+  async findOne(id: string) {
+    return await this.CompanyModel.findOne({ _id: id })
   }
 
+  // Cập Nhật Thông Tin Companies
   async update(id: string, updateCompanyDto: UpdateCompanyDto, user: IUser) {
     if (await this.CompanyModel.findById(id)) {
       return await this.CompanyModel.findByIdAndUpdate(
         id,
         {
-          ...updateCompanyDto, updatedBy: {
+          ...updateCompanyDto,
+          updatedBy: {
             _id: user._id,
             email: user.email
           }
@@ -78,15 +82,16 @@ export class CompaniesService {
     }
   }
 
+  // Xóa Companies
   async remove(id: string, user: IUser) {
     await this.CompanyModel.updateOne(
-      { _id: id }, {
-      deletedBy: {
-        _id: user._id,
-        email: user.email
-      },
-
-    });
+      { _id: id },
+      {
+        deletedBy: {
+          _id: user._id,
+          email: user.email
+        },
+      });
     return await this.CompanyModel.softDelete({ _id: id })
   }
 }

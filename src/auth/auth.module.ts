@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import ms from 'ms';
 import { AuthController } from './auth.controller';
+import { User } from './decorator/customsize';
 
 @Module({
   imports: [
@@ -17,9 +18,9 @@ import { AuthController } from './auth.controller';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
+        secret: configService.get<string>('ACCESS_JWT_SECRET'),
         signOptions: {
-          expiresIn: ms(configService.get<string>('JWT_EXPIRE')),
+          expiresIn: ms(configService.get<string>('ACCESS_JWT_EXPIRE')) / 1000,
         },
       }),
       inject: [ConfigService],
