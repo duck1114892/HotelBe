@@ -1,20 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipeBuilder, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipeBuilder, HttpStatus, UploadedFiles } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { Public, ResponseMessage } from 'src/auth/decorator/customsize';
 
 @Controller('files')
 export class FilesController {
   constructor(private readonly filesService: FilesService) { }
-
-
   @Post('upload')
   @Public()
   @ResponseMessage("upload success")
-  @UseInterceptors(FileInterceptor('img')) //tên field sử dụng trong form-data
-  uploadFile(@UploadedFile(
+
+  @UseInterceptors(FilesInterceptor('img')) //tên field sử dụng trong form-data
+  uploadFile(@UploadedFiles(
     new ParseFilePipeBuilder()
       .addFileTypeValidator({
         fileType: /^(jpg|image\/jpeg|png|image\/png|gif|text\/plain|application\/pdf|docx)$/i
@@ -23,12 +22,24 @@ export class FilesController {
         maxSize: 1000 * 1024
       })
       .build({
-        errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
+        errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+
+
       }),
-  ) file: Express.Multer.File) {
-    return {
-      filesName: file.filename
+  ) files: Express.Multer.File[]) {
+    console.log(files)
+    const uploadedFileNames = files.map((file) => file.filename);
+    if (uploadedFileNames.length !== 1) {
+      return {
+        filesName: uploadedFileNames[0]
+      }
     }
+    else {
+      return {
+        filesName: uploadedFileNames
+      }
+    }
+
   }
 
   @Get()

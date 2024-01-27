@@ -22,12 +22,12 @@ export class UsersService {
     if (checkEmail) {
       throw new BadRequestException(`Email : ${creatUserDTO.email} đã tồn tại`);
     }
-    const { password, company } = creatUserDTO;
+    const { password, hotel } = creatUserDTO;
     const hashPassword = this.hashPassword(password);
     let res = await this.UserModel.create({
       ...creatUserDTO,
+      hotel,
       password: hashPassword,
-      company: company,
       createdBy: {
         _id: user._id,
         email: user.email
@@ -39,26 +39,25 @@ export class UsersService {
       createdAt: res.createdAt
     }
   }
-  async registerUser(registerUserDto: RegisterUserDto, user: IUser) {
-
+  async registerUser(registerUserDto: RegisterUserDto) {
     const { password } = registerUserDto;
     const hashPassword = this.hashPassword(password);
     const emailDto = registerUserDto.email;
-    const checkEmail = this.UserModel.findOne({ email: emailDto });
+    const checkEmail = await this.UserModel.findOne({ email: emailDto });
     if (checkEmail) {
-
-      throw new BadRequestException(`Email : ${emailDto} đã tồn tại`);
+      throw new BadRequestException(`Email: ${emailDto} đã tồn tại`);
     }
     let res = await this.UserModel.create({
       ...registerUserDto,
+      role: "65800e2498347170d451caae",
       password: hashPassword,
     });
-
     return {
       _id: res._id,
-      createdAt: res.createdAt
-    }
+      createdAt: res.createdAt,
+    };
   }
+
 
   async findAll(currentPage, limit, queryString) {
     const { filter, projection, population } = aqp(queryString);
@@ -78,6 +77,10 @@ export class UsersService {
       .populate([
         {
           path: "role",
+          select: { _id: 1, name: 1 }
+        },
+        {
+          path: "hotel",
           select: { _id: 1, name: 1 }
         },])
       .exec()
@@ -122,11 +125,20 @@ export class UsersService {
         email: user.email
       }
     });
+    return res
+  }
+  async updateUserHotelId(user: IUser, hotelId) {
+    const res = await this.UserModel.findByIdAndUpdate({ _id: user._id }, {
+      hotel: hotelId,
+      updatedBy: {
+        _id: user._id,
+        email: user.email
+      }
+    });
     return {
-
+      res
     }
   }
-
   async remove(id: string, user: IUser) {
     await this.UserModel.updateOne({ _id: id }, {
       deletedBy: {
@@ -155,4 +167,5 @@ export class UsersService {
     })
     return res
   }
+
 }

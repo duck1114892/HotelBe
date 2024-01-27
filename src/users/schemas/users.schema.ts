@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
+import { Hotel } from 'src/hotel/schemas/hotel.schemas';
 import { Permission } from 'src/permissions/schemas/permission.schemas';
 import { Role } from 'src/roles/schemas/role.schemas';
 export type UsersDocument = HydratedDocument<Users>;
@@ -31,11 +32,8 @@ export class Users {
   @Prop()
   refreshToken: string;
 
-  @Prop({ type: Object })
-  company: {
-    _id: mongoose.Schema.Types.ObjectId;
-    name: string
-  };
+  @Prop({ ref: Hotel.name })
+  hotel: string;
 
   @Prop()
   createdAt: Date;

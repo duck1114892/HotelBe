@@ -11,27 +11,27 @@ export class AuthController {
     constructor(
         private authService: AuthService,
     ) { }
+
     @Get('/account')
     handleAccount(@User() user: IUser) {
-        return { user }
+        return this.authService.getRoleAndPermission(user)
     }
 
-    @UseGuards(localAuthGuard)
     @Public()
+    @UseGuards(localAuthGuard)
     @ResponseMessage("User Login")
     @Post('/login')
     handleLogin(@Req() req, @Res({ passthrough: true }) response: Response) {
         return this.authService.login(req.user, response);
     }
-
+    @Public()
     @Post('/register')
-    handleRegister(@Body() registerUSerDto: RegisterUserDto, @User() users: IUser) {
-        return this.authService.register(registerUSerDto, users)
+    @ResponseMessage("Register Success")
+    handleRegister(@Body() registerUSerDto: RegisterUserDto) {
+        return this.authService.register(registerUSerDto)
     }
-
-
+    @Public()
     @Get('/refresh')
-    @ResponseMessage("User Login")
     handleRefreshToken(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
         const refeshToken = request.cookies["refreshToken"]
         return this.authService.processRefreshToken(refeshToken, response)

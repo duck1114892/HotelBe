@@ -10,5 +10,6 @@ import { MongooseModule } from '@nestjs/mongoose';
   imports: [
     MongooseModule.forFeature([{ name: Permission.name, schema: PermissionSchema }]),
   ],
+  exports: [PermissionsService]
 })
 export class PermissionsModule { }

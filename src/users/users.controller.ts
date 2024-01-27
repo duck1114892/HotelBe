@@ -9,7 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto, RegisterUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Public, ResponseMessage, User } from 'src/auth/decorator/customsize';
 import { IUser } from './user.interface';
@@ -24,6 +24,12 @@ export class UsersController {
   @ResponseMessage("Register a new user")
   create(@Body() createUserDTO: CreateUserDto, @User() user: IUser) {
     return this.usersService.create(createUserDTO, user);
+  }
+  @Public()
+  @Post('/signIn')
+  @ResponseMessage("Register a new user")
+  Register(@Body() createUserDTO: RegisterUserDto) {
+    return this.usersService.registerUser(createUserDTO);
   }
   // lấy người dùng
   @Get()
@@ -42,10 +48,10 @@ export class UsersController {
   }
 
   // cập nhật người dùng
-  @Patch()
+  @Patch(':id')
   @ResponseMessage("Update User Succeeded")
-  update(@Body() req, @Body() updateUserDto: UpdateUserDto, @User() user: IUser) {
-    return this.usersService.update(req._id, updateUserDto, user);
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @User() user: IUser) {
+    return this.usersService.update(id, updateUserDto, user);
   }
 
   // xóa người dùng theo id.(cập nhật delete)

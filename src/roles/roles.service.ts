@@ -58,13 +58,11 @@ export class RolesService {
   }
 
   async findOne(id: string) {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      throw new BadRequestException("not found role")
-    }
-    return (await this.RoleModel.findById(id)).populate({
-      path: "permission",
-      select: { _id: 1, apiPath: 1, name: 1, method: 1, module: 1 }
-    });
+    return await this.RoleModel.findById(id)
+      .populate({
+        path: "permission",
+        select: { _id: 1, apiPath: 1, name: 1, method: 1, module: 1 }
+      });
   }
 
   async update(id: string, updateRoleDto: UpdateRoleDto, user: IUser) {

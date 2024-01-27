@@ -6,13 +6,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { softDeletePlugin } from 'soft-delete-plugin-mongoose';
-import { CompaniesModule } from './companies/companies.module';
-import { JobsModule } from './jobs/jobs.module';
 import { FilesModule } from './files/files.module';
-import { ResumesModule } from './resumes/resumes.module';
 import { PermissionsModule } from './permissions/permissions.module';
 import { RolesModule } from './roles/roles.module';
 import { DatabasesModule } from './databases/databases.module';
+import { HotelModule } from './hotel/hotel.module';
+import { RoomModule } from './room/room.module';
+import { BookingModule } from './booking/booking.module';
+import { RatingModule } from './rating/rating.module';
 
 @Module({
   imports: [
@@ -32,13 +33,14 @@ import { DatabasesModule } from './databases/databases.module';
     }),
     UsersModule,
     AuthModule,
-    CompaniesModule,
-    JobsModule,
     FilesModule,
-    ResumesModule,
     PermissionsModule,
     RolesModule,
     DatabasesModule,
+    HotelModule,
+    RoomModule,
+    BookingModule,
+    RatingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

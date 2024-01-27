@@ -10,17 +10,21 @@ import { JwtStrategy } from './jwt.strategy';
 import ms from 'ms';
 import { AuthController } from './auth.controller';
 import { User } from './decorator/customsize';
+import { RolesModule } from 'src/roles/roles.module';
+import { PermissionsModule } from 'src/permissions/permissions.module';
 
 @Module({
   imports: [
     UsersModule,
+    RolesModule,
+    PermissionsModule,
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('ACCESS_JWT_SECRET'),
         signOptions: {
-          expiresIn: ms(configService.get<string>('ACCESS_JWT_EXPIRE')) / 1000,
+          expiresIn: ms(configService.get<string>('ACCESS_JWT_EXPIRE')),
         },
       }),
       inject: [ConfigService],

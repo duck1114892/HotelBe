@@ -41,7 +41,7 @@ export class DatabasesService implements OnModuleInit {
                         name: USER_ROLE,
                         description: "Người dùng/Ứng viên sử dụng hệ thống",
                         isActive: true,
-                        permission: [] //không set quyền, chỉ cần add ROLE
+                        permission: ['648ab436f4328bd3153ee217', '648ad488dafdb9754f40b847'] //không set quyền, chỉ cần add ROLE
                     }
                 ]);
             }

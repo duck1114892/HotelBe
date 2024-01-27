@@ -68,13 +68,7 @@ export class CreateUserDto {
     message: 'Không Được Bỏ Trống address',
   })
   address: string;
-
-  @IsNotEmptyObject()
-  @IsObject()
-  @ValidateNested()
-  @Type(() => Company)
-  company: Company;
-
+  hotel: string
   createdAt: Date;
   updatedeAt: Date;
 }
@@ -90,7 +84,6 @@ export class RegisterUserDto {
       message: 'Định Dạng Phải Là Email',
     },
   )
-
   @IsNotEmpty({
     message: 'Không Được Bỏ Trống Email',
   })
@@ -105,7 +98,10 @@ export class RegisterUserDto {
     message: 'Không Được Bỏ Trống address',
   })
   address: string;
-
+  @IsNotEmpty({
+    message: 'Không Được Bỏ Trống gender',
+  })
+  gender: string;
   @IsNotEmpty({
     message: 'Không được để trống',
   })
