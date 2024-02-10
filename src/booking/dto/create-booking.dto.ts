@@ -15,7 +15,7 @@ export class CreateBookingDto {
     })
     total: number;
     @IsNotEmpty({
-        message: 'Không Được Bỏ Trống price',
+        message: 'Không Được Bỏ Trống Status',
     })
     status: string;
     quantity: number;

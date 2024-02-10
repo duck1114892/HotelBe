@@ -89,12 +89,16 @@ export class BookingService {
           select: { _id: 1, name: 1, img: 1 }
         }
       ]
+
     );
   }
   async findBookingByUser(id: string) {
     return await this.BookingModel.find({
       userId: id
-    })
+    }).populate([{
+      path: "roomId",
+      select: { _id: 1, name: 1, img: 1, address: 1 }
+    }])
   }
   async update(id: string, updateBookingDto: UpdateBookingDto, user: IUser) {
     return await this.BookingModel.findByIdAndUpdate({ _id: id }, {

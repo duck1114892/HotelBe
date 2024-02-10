@@ -660,7 +660,7 @@ export const INIT_PERMISSIONS = [
     {
         "_id": "648ad650dafdb9754f40b8b2",
         "name": "create comment",
-        "apiPath": "/api/v1/rating",
+        "apiPath": "/api/v1/rating/:id",
         "method": "GET",
         "module": "RATING",
         "createdBy": {

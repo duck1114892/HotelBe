@@ -20,7 +20,7 @@ export class Room {
     address: string;
 
     @Prop({ require: true })
-    price: string;
+    price: number;
 
     @Prop({ require: true })
     availability: string;

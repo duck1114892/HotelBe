@@ -4,6 +4,7 @@ import { CreateRatingDto } from './dto/create-rating.dto';
 import { UpdateRatingDto } from './dto/update-rating.dto';
 import { IUser } from 'src/users/user.interface';
 import { User } from 'src/auth/decorator/customsize';
+import { ObjectId } from 'mongoose';
 
 @Controller('rating')
 export class RatingController {
@@ -14,9 +15,9 @@ export class RatingController {
     return this.ratingService.create(createRatingDto, user);
   }
 
-  @Get()
-  findAll() {
-    return this.ratingService.findAll();
+  @Get(':id')
+  findAll(@Param('id') id: ObjectId) {
+    return this.ratingService.findAll(id);
   }
 
   @Delete(':id')

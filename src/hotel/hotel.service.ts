@@ -8,13 +8,17 @@ import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import aqp from 'api-query-params';
 import { UsersService } from 'src/users/users.service';
 import mongoose, { Types } from 'mongoose';
+import { Rating } from 'src/rating/schemas/rating.schemas';
+import { RatingService } from 'src/rating/rating.service';
 
 @Injectable()
 export class HotelService {
   constructor(@InjectModel(Hotel.name)
   private HotelModel: SoftDeleteModel<HotelDocument>,
-    private userService: UsersService
+    private userService: UsersService,
+    private ratingService: RatingService
   ) { }
+
   async create(createHotelDto: CreateHotelDto, user: IUser) {
     const req = await this.HotelModel.create({
       ...createHotelDto,
@@ -79,8 +83,27 @@ export class HotelService {
     }
 
   }
+  async updateRating(id) {
+    const getRating = await this.ratingService.findAll(id)
+    const getRate = getRating.map((item) => {
+      return item.rating
+    })
+    console.log(getRate)
+    if (getRate.length === 0) {
+      await this.HotelModel.findByIdAndUpdate({ _id: id }, {
+        rating: 0
+      })
+    } else {
+      const getAvr = getRate.reduce((total, num) => total + num, 0);
+      const getRoundAvr = Math.round(getAvr / getRate.length);
+      await this.HotelModel.findByIdAndUpdate({ _id: id }, {
+        rating: getRoundAvr
+      })
+    }
 
+  }
   async findOne(id: string) {
+    this.updateRating(id)
     return await this.HotelModel.findById({ _id: id }).exec();
   }
 

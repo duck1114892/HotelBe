@@ -52,14 +52,15 @@ export class RoomService {
   async findAll(currentPage, limit, queryString) {
     await this.RoomModel.updateMany({ availability: 0 }, { type: 'OUT_OFF' }, { multi: true })
     const { filter, projection, population } = aqp(queryString);
+
     delete filter.current
     delete filter.pageSize
+    console.log(filter)
     let { sort } = aqp(queryString);
     let offset = (+currentPage - 1) * (+limit);
     let defaultLimit = +limit ? +limit : 10;
     const totalItems = (await this.RoomModel.find(filter)).length;
     const totalPages = Math.ceil(totalItems / defaultLimit);
-
     let result = await this.RoomModel.find(filter).select("-password -refreshToken")
       .skip(offset)
       .limit(defaultLimit)
@@ -77,10 +78,10 @@ export class RoomService {
 
     return {
       meta: {
-        current: currentPage, //trang hiện tại
-        pageSize: limit, //số lượng bản ghi đã lấy
-        pages: totalPages, //tổng số trang với điều kiện query
-        total: totalItems // tổng số phần tử (số bản ghi)
+        current: currentPage,
+        pageSize: limit,
+        pages: totalPages,
+        total: totalItems
       },
       result
     }
@@ -108,7 +109,6 @@ export class RoomService {
     });
   }
   async updateQuantity(id: ObjectId, quantity, type, user: IUser) {
-    console.log("check>>>>>", type)
     return await this.RoomModel.findByIdAndUpdate({ _id: id }, {
       type: type,
       availability: quantity,

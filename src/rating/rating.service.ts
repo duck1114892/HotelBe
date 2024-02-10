@@ -5,6 +5,7 @@ import { IUser } from 'src/users/user.interface';
 import { InjectModel } from '@nestjs/mongoose';
 import { Rating, RatingDocument } from './schemas/rating.schemas';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
+import { ObjectId } from 'mongoose';
 
 @Injectable()
 export class RatingService {
@@ -20,8 +21,8 @@ export class RatingService {
     })
   }
 
-  async findAll() {
-    return await this.RatingModel.find({});
+  async findAll(id: ObjectId) {
+    return await this.RatingModel.find({ hotelId: id });
   }
 
   findOne(id: number) {

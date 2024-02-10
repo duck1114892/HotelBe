@@ -10,5 +10,6 @@ import { Rating, RatingSchema } from './schemas/rating.schemas';
   imports: [
     MongooseModule.forFeature([{ name: Rating.name, schema: RatingSchema }]),
   ],
+  exports: [RatingService]
 })
 export class RatingModule { }
