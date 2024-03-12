@@ -468,7 +468,7 @@ export const INIT_PERMISSIONS = [
     {
         "_id": "648ad56ddafdb9754f40b87c",
         "name": "Fetch booking by user",
-        "apiPath": "/api/v1/booking/by",
+        "apiPath": "/api/v1/booking/byUser",
         "method": "POST",
         "module": "BOOKINGS",
         "createdBy": {

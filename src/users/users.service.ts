@@ -49,7 +49,7 @@ export class UsersService {
     }
     let res = await this.UserModel.create({
       ...registerUserDto,
-      role: "65800e2498347170d451caae",
+      role: "65c335b10b532490265e7fba",
       password: hashPassword,
     });
     return {
