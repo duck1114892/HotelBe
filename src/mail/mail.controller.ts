@@ -51,29 +51,4 @@ export class MailController {
             throw new Error('Failed to send email');
         }
     }
-    @Public()
-    @Post('verifyMail')
-    async handleVerfiyMail(@Req() req) {
-        try {
-            const data = req.body;
-            console.log(data);
-            await this.mailerService.sendMail({
-                to: data?.email,
-                from: '"Support Team" <support@example.com>',
-                subject: 'Xác Thực Mail',
-                template: "btn",
-                context: {
-                    receiver: "Check",
-                    data: {
-                        link: data.link
-                    }
-                }
-            });
-
-            return { message: 'Email sent successfully' };
-        } catch (error) {
-            console.error('Error sending email:', error);
-            throw new Error('Failed to send email');
-        }
-    }
 }
