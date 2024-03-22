@@ -5,6 +5,7 @@ import { localAuthGuard } from "./passport/local-auth.guard";
 import { CreateUserDto, RegisterUserDto } from "src/users/dto/create-user.dto";
 import { IUser } from "src/users/user.interface";
 import { Request, Response } from "express";
+import { EmailDto } from "./passport/mail.dto";
 
 @Controller("auth")
 export class AuthController {
@@ -29,6 +30,12 @@ export class AuthController {
     @ResponseMessage("Register Success")
     handleRegister(@Body() registerUSerDto: RegisterUserDto) {
         return this.authService.register(registerUSerDto)
+    }
+    @Public()
+    @Post('/checkMail')
+    @ResponseMessage("Success")
+    handleCheckMail(@Body() data: EmailDto) {
+        return this.authService.existMail(data.email)
     }
     @Public()
     @Get('/refresh')

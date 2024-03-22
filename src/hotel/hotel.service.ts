@@ -88,7 +88,6 @@ export class HotelService {
     const getRate = getRating.map((item) => {
       return item.rating
     })
-    console.log(getRate)
     if (getRate.length === 0) {
       await this.HotelModel.findByIdAndUpdate({ _id: id }, {
         rating: 0

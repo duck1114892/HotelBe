@@ -57,7 +57,12 @@ export class UsersService {
       createdAt: res.createdAt,
     };
   }
-
+  async checkMailExist(mail) {
+    const checkEmail = await this.UserModel.findOne({ email: mail })
+    if (checkEmail) {
+      throw new BadRequestException(`Email: ${mail} đã tồn tại`);
+    }
+  }
 
   async findAll(currentPage, limit, queryString) {
     const { filter, projection, population } = aqp(queryString);

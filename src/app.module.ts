@@ -14,6 +14,8 @@ import { HotelModule } from './hotel/hotel.module';
 import { RoomModule } from './room/room.module';
 import { BookingModule } from './booking/booking.module';
 import { RatingModule } from './rating/rating.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { MailModule } from './mail/mailer.module';
 
 @Module({
   imports: [
@@ -41,6 +43,7 @@ import { RatingModule } from './rating/rating.module';
     RoomModule,
     BookingModule,
     RatingModule,
+    MailModule
   ],
   controllers: [AppController],
   providers: [AppService],

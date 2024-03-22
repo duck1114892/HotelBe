@@ -30,6 +30,9 @@ export class AuthService {
     return await this.usersService.registerUser(registerUserDto);
   }
 
+  async existMail(mail) {
+    return await this.usersService.checkMailExist(mail)
+  }
   async login(user: IUser, response: Response) {
     const { _id, name, email, role, permission } = user;
     const payload = {
@@ -79,6 +82,7 @@ export class AuthService {
       const user = await this.usersService.findUserbyToken(token);
 
       if (user) {
+        console.log(user)
         const { _id, name, email, role, permission } = decodedToken;
         const payload = {
           sub: "token login",
