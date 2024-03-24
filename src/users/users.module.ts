@@ -10,11 +10,6 @@ import { join } from 'path';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Users.name, schema: UsersSchema }]),
-    ServeStaticModule.forRoot(
-      {
-        rootPath: join(__dirname, '...', 'client')
-      }
-    )
   ],
   controllers: [UsersController],
   providers: [UsersService],

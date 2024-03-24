@@ -17,8 +17,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Public, ResponseMessage, User } from 'src/auth/decorator/customsize';
 import { IUser } from './user.interface';
 import { Response } from 'express';
-import { join } from 'path';
-
+import path, { join } from 'path';
 //localhost:9900/users
 @Controller('users')
 export class UsersController {
@@ -28,12 +27,12 @@ export class UsersController {
   @ResponseMessage("Active Successed")
   active(@Param('id') id: string, @Res() res: Response) {
     try {
-      const update = this.usersService.updateStatusAccount(id)
-      return res.status(HttpStatus.OK).sendFile('index.html', {
-        root: join(__dirname)
-      })
-    }
-    catch (error) {
+      const update = this.usersService.updateStatusAccount(id);
+      // Lấy đường dẫn tuyệt đối đến tệp index.html trong thư mục public trong mã nguồn
+      const filePath = path.join(__dirname, '..', '..', 'src', 'users', 'index.html');
+      // Gửi tệp từ thư mục public trong mã nguồn
+      return res.status(HttpStatus.OK).sendFile(filePath);
+    } catch (error) {
       throw new NotFoundException('Failed to update status');
     }
 
