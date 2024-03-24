@@ -11,7 +11,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors(
     {
-      "origin": 'https://hotelfe.hotelduckgg.click',
+      "origin": ['https://hotelfe.hotelduckgg.click', 'http://localhost:3000'],
       "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
       credentials: true
     }

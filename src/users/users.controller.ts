@@ -7,18 +7,37 @@ import {
   Param,
   Delete,
   Query,
+  Res,
+  NotFoundException,
+  HttpStatus,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto, RegisterUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Public, ResponseMessage, User } from 'src/auth/decorator/customsize';
 import { IUser } from './user.interface';
+import { Response } from 'express';
+import { join } from 'path';
 
 //localhost:9900/users
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
+  @Public()
+  @Get('/activeAccount/:id')
+  @ResponseMessage("Active Successed")
+  active(@Param('id') id: string, @Res() res: Response) {
+    try {
+      const update = this.usersService.updateStatusAccount(id)
+      return res.status(HttpStatus.OK).sendFile('index.html', {
+        root: join(__dirname)
+      })
+    }
+    catch (error) {
+      throw new NotFoundException('Failed to update status');
+    }
 
+  }
   //Tạo Người dùng mới
   @Post()
   @ResponseMessage("Register a new user")
@@ -40,13 +59,18 @@ export class UsersController {
     @Query() queryString: string) {
     return this.usersService.findAll(currentPage, limit, queryString);
   }
+
   // lấy người dùng theo id
   @Get(':id')
   @Public()
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
-
+  @Get('/email/:email')
+  @Public()
+  findOneEmail(@Param('email') email: string) {
+    return this.usersService.findOneByEmail(email);
+  }
   // cập nhật người dùng
   @Patch(':id')
   @ResponseMessage("Update User Succeeded")

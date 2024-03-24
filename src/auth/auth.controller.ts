@@ -37,6 +37,7 @@ export class AuthController {
     handleCheckMail(@Body() data: EmailDto) {
         return this.authService.existMail(data.email)
     }
+
     @Public()
     @Get('/refresh')
     handleRefreshToken(@Req() request: Request, @Res({ passthrough: true }) response: Response) {

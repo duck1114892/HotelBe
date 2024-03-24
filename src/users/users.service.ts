@@ -51,6 +51,7 @@ export class UsersService {
       ...registerUserDto,
       role: "65c335b10b532490265e7fba",
       password: hashPassword,
+      statusAccount: 'false'
     });
     return {
       _id: res._id,
@@ -110,6 +111,7 @@ export class UsersService {
       }
       ])
   }
+
   async findOneByEmail(email: string) {
     return await this.UserModel.findOne({
       email: email,
@@ -130,6 +132,12 @@ export class UsersService {
         email: user.email
       }
     });
+    return res
+  }
+  async updateStatusAccount(id: string) {
+    const res = await this.UserModel.findByIdAndUpdate(id, {
+      statusAccount: true
+    })
     return res
   }
   async updateUserHotelId(user: IUser, hotelId) {

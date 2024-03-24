@@ -109,7 +109,7 @@ export class RegisterUserDto {
     minLength: 3,
   })
   password: string;
-
+  statusAccount: boolean;
 
   createdAt: Date;
   updatedeAt: Date;

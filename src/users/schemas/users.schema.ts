@@ -21,6 +21,9 @@ export class Users {
   @Prop()
   gender: string;
 
+  @Prop()
+  statusAccount: boolean;
+
   @Prop({ require: true, type: mongoose.Schema.Types.ObjectId, ref: Permission.name })
   permission: mongoose.Schema.Types.ObjectId
   @Prop()
