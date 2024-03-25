@@ -30,6 +30,7 @@ export class UsersController {
       const update = this.usersService.updateStatusAccount(id);
       // Lấy đường dẫn tuyệt đối đến tệp index.html trong thư mục public trong mã nguồn
       const filePath = path.join(__dirname,'..','..','..','src', 'users', 'index.html');
+      console.log(path.join(__dirname))
       // Gửi tệp từ thư mục public trong mã nguồn
       return res.status(HttpStatus.OK).sendFile(filePath);
     } catch (error) {
